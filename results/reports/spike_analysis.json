@@ -1,0 +1,151 @@
+{
+  "spike_count": 13,
+  "total_count": 402,
+  "spike_percentage": 3.23,
+  "models": {
+    "Historical Climatology": {
+      "overall": {
+        "RMSE": 100.45,
+        "MAE": 83.17,
+        "MAPE": 61.09,
+        "sMAPE": 40.87,
+        "R2": 0.2097
+      },
+      "spike_period": {
+        "RMSE": 70.32,
+        "MAE": 56.94,
+        "MAPE": 21.69,
+        "sMAPE": 20.82,
+        "R2": 0.5549
+      },
+      "underestimation_rate_pct": 30.77,
+      "avg_underestimate_magnitude": 22.51
+    },
+    "XGBoost": {
+      "overall": {
+        "RMSE": 34.58,
+        "MAE": 26.08,
+        "MAPE": 15.99,
+        "sMAPE": 14.5,
+        "R2": 0.9063
+      },
+      "spike_period": {
+        "RMSE": 38.45,
+        "MAE": 24.34,
+        "MAPE": 8.9,
+        "sMAPE": 9.72,
+        "R2": 0.8669
+      },
+      "underestimation_rate_pct": 76.92,
+      "avg_underestimate_magnitude": 20.59
+    },
+    "Extra Trees": {
+      "overall": {
+        "RMSE": 36.37,
+        "MAE": 26.9,
+        "MAPE": 16.09,
+        "sMAPE": 14.55,
+        "R2": 0.8964
+      },
+      "spike_period": {
+        "RMSE": 50.02,
+        "MAE": 35.34,
+        "MAPE": 13.36,
+        "sMAPE": 14.96,
+        "R2": 0.7748
+      },
+      "underestimation_rate_pct": 100.0,
+      "avg_underestimate_magnitude": 35.34
+    },
+    "Bi-LSTM": {
+      "overall": {
+        "RMSE": 59.15,
+        "MAE": 45.72,
+        "MAPE": 27.77,
+        "sMAPE": 24.18,
+        "R2": 0.726
+      },
+      "spike_period": {
+        "RMSE": 89.54,
+        "MAE": 70.49,
+        "MAPE": 27.42,
+        "sMAPE": 33.3,
+        "R2": 0.2783
+      },
+      "underestimation_rate_pct": 100.0,
+      "avg_underestimate_magnitude": 70.49
+    },
+    "Bi-GRU": {
+      "overall": {
+        "RMSE": 42.67,
+        "MAE": 30.73,
+        "MAPE": 16.93,
+        "sMAPE": 16.12,
+        "R2": 0.8574
+      },
+      "spike_period": {
+        "RMSE": 68.9,
+        "MAE": 48.75,
+        "MAPE": 18.21,
+        "sMAPE": 21.26,
+        "R2": 0.5727
+      },
+      "underestimation_rate_pct": 100.0,
+      "avg_underestimate_magnitude": 48.75
+    },
+    "TCN": {
+      "overall": {
+        "RMSE": 77.24,
+        "MAE": 57.62,
+        "MAPE": 34.91,
+        "sMAPE": 29.37,
+        "R2": 0.5328
+      },
+      "spike_period": {
+        "RMSE": 123.13,
+        "MAE": 96.5,
+        "MAPE": 34.71,
+        "sMAPE": 43.34,
+        "R2": -0.3646
+      },
+      "underestimation_rate_pct": 100.0,
+      "avg_underestimate_magnitude": 96.5
+    },
+    "SE-1": {
+      "overall": {
+        "RMSE": 45.85,
+        "MAE": 37.97,
+        "MAPE": 27.28,
+        "sMAPE": 22.9,
+        "R2": 0.8354
+      },
+      "spike_period": {
+        "RMSE": 53.55,
+        "MAE": 42.14,
+        "MAPE": 15.63,
+        "sMAPE": 17.36,
+        "R2": 0.7419
+      },
+      "underestimation_rate_pct": 84.62,
+      "avg_underestimate_magnitude": 40.82
+    },
+    "SE-2": {
+      "overall": {
+        "RMSE": 39.14,
+        "MAE": 29.84,
+        "MAPE": 17.82,
+        "sMAPE": 16.95,
+        "R2": 0.88
+      },
+      "spike_period": {
+        "RMSE": 64.64,
+        "MAE": 56.64,
+        "MAPE": 22.84,
+        "sMAPE": 26.27,
+        "R2": 0.624
+      },
+      "underestimation_rate_pct": 92.31,
+      "avg_underestimate_magnitude": 56.14
+    }
+  }
+}

@@ -1,0 +1,10 @@
+Architecture,Components,Meta_Learner,RMSE,MAE,MAPE,sMAPE,R2
+XGBoost (Standalone),XGBoost,None,34.58,26.08,15.99,14.5,0.9063
+Extra Trees (Standalone),Extra Trees,None,36.37,26.9,16.09,14.55,0.8964
+XGBoost + Bi-LSTM (Pairwise),"XGBoost, Bi-LSTM",Extra Trees,46.87,39.98,29.95,24.51,0.8279
+XGBoost + Bi-GRU (Pairwise),"XGBoost, Bi-GRU",Extra Trees,35.1,26.52,15.67,14.91,0.9035
+XGBoost + TCN (Pairwise),"XGBoost, TCN",Extra Trees,39.45,29.07,16.2,15.98,0.8781
+SE-1 (Meta-A: Full Triplet),"XGBoost, Bi-LSTM, TCN",Extra Trees,45.85,37.97,27.28,22.9,0.8354
+SE-2 (Meta-B: Full Triplet),"XGBoost, Bi-GRU, TCN",Extra Trees,39.14,29.84,17.82,16.95,0.88
+SE-1 (Ridge Meta-Learner),"XGBoost, Bi-LSTM, TCN",RidgeCV,45.32,37.92,24.69,29.98,0.8391
+SE-2 (Ridge Meta-Learner),"XGBoost, Bi-GRU, TCN",RidgeCV,40.99,32.98,19.67,22.21,0.8684

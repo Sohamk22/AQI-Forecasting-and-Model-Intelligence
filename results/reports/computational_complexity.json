@@ -1,0 +1,42 @@
+{
+  "Historical Climatology": {
+    "train_time_sec": 0.722,
+    "param_count": 0,
+    "inference_latency_ms": 1.753
+  },
+  "XGBoost": {
+    "train_time_sec": 2.206,
+    "param_count": 200,
+    "inference_latency_ms": 0.016
+  },
+  "Extra Trees": {
+    "train_time_sec": 0.938,
+    "param_count": 100,
+    "inference_latency_ms": 0.086
+  },
+  "Bi-LSTM": {
+    "train_time_sec": 14.403,
+    "param_count": 43073,
+    "inference_latency_ms": 0.076
+  },
+  "Bi-GRU": {
+    "train_time_sec": 12.536,
+    "param_count": 33345,
+    "inference_latency_ms": 0.051
+  },
+  "TCN": {
+    "train_time_sec": 9.139,
+    "param_count": 58145,
+    "inference_latency_ms": 0.248
+  },
+  "SE-1": {
+    "train_time_sec": 84.413,
+    "param_count": 101318,
+    "inference_latency_ms": 0.268
+  },
+  "SE-2": {
+    "train_time_sec": 82.299,
+    "param_count": 91590,
+    "inference_latency_ms": 0.306
+  }
+}

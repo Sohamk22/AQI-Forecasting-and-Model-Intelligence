@@ -1,0 +1,92 @@
+[
+  {
+    "Architecture":"XGBoost (Standalone)",
+    "Components":"XGBoost",
+    "Meta_Learner":"None",
+    "RMSE":34.58,
+    "MAE":26.08,
+    "MAPE":15.99,
+    "sMAPE":14.5,
+    "R2":0.9063
+  },
+  {
+    "Architecture":"Extra Trees (Standalone)",
+    "Components":"Extra Trees",
+    "Meta_Learner":"None",
+    "RMSE":36.37,
+    "MAE":26.9,
+    "MAPE":16.09,
+    "sMAPE":14.55,
+    "R2":0.8964
+  },
+  {
+    "Architecture":"XGBoost + Bi-LSTM (Pairwise)",
+    "Components":"XGBoost, Bi-LSTM",
+    "Meta_Learner":"Extra Trees",
+    "RMSE":46.87,
+    "MAE":39.98,
+    "MAPE":29.95,
+    "sMAPE":24.51,
+    "R2":0.8279
+  },
+  {
+    "Architecture":"XGBoost + Bi-GRU (Pairwise)",
+    "Components":"XGBoost, Bi-GRU",
+    "Meta_Learner":"Extra Trees",
+    "RMSE":35.1,
+    "MAE":26.52,
+    "MAPE":15.67,
+    "sMAPE":14.91,
+    "R2":0.9035
+  },
+  {
+    "Architecture":"XGBoost + TCN (Pairwise)",
+    "Components":"XGBoost, TCN",
+    "Meta_Learner":"Extra Trees",
+    "RMSE":39.45,
+    "MAE":29.07,
+    "MAPE":16.2,
+    "sMAPE":15.98,
+    "R2":0.8781
+  },
+  {
+    "Architecture":"SE-1 (Meta-A: Full Triplet)",
+    "Components":"XGBoost, Bi-LSTM, TCN",
+    "Meta_Learner":"Extra Trees",
+    "RMSE":45.85,
+    "MAE":37.97,
+    "MAPE":27.28,
+    "sMAPE":22.9,
+    "R2":0.8354
+  },
+  {
+    "Architecture":"SE-2 (Meta-B: Full Triplet)",
+    "Components":"XGBoost, Bi-GRU, TCN",
+    "Meta_Learner":"Extra Trees",
+    "RMSE":39.14,
+    "MAE":29.84,
+    "MAPE":17.82,
+    "sMAPE":16.95,
+    "R2":0.88
+  },
+  {
+    "Architecture":"SE-1 (Ridge Meta-Learner)",
+    "Components":"XGBoost, Bi-LSTM, TCN",
+    "Meta_Learner":"RidgeCV",
+    "RMSE":45.32,
+    "MAE":37.92,
+    "MAPE":24.69,
+    "sMAPE":29.98,
+    "R2":0.8391
+  },
+  {
+    "Architecture":"SE-2 (Ridge Meta-Learner)",
+    "Components":"XGBoost, Bi-GRU, TCN",
+    "Meta_Learner":"RidgeCV",
+    "RMSE":40.99,
+    "MAE":32.98,
+    "MAPE":19.67,
+    "sMAPE":22.21,
+    "R2":0.8684
+  }
+]

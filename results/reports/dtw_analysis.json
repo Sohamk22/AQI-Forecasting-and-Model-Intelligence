@@ -1,0 +1,50 @@
+{
+  "Historical Climatology": {
+    "total_dtw_distance": 19390.55,
+    "normalized_dtw_distance": 24.1176,
+    "mean_30day_window_dtw": 39.5388,
+    "warping_path_length": 603
+  },
+  "XGBoost": {
+    "total_dtw_distance": 7269.89,
+    "normalized_dtw_distance": 9.0422,
+    "mean_30day_window_dtw": 9.4848,
+    "warping_path_length": 485
+  },
+  "Extra Trees": {
+    "total_dtw_distance": 6116.68,
+    "normalized_dtw_distance": 7.6078,
+    "mean_30day_window_dtw": 8.296,
+    "warping_path_length": 459
+  },
+  "Bi-LSTM": {
+    "total_dtw_distance": 13232.55,
+    "normalized_dtw_distance": 16.4584,
+    "mean_30day_window_dtw": 17.6847,
+    "warping_path_length": 543
+  },
+  "Bi-GRU": {
+    "total_dtw_distance": 7498.88,
+    "normalized_dtw_distance": 9.327,
+    "mean_30day_window_dtw": 10.0007,
+    "warping_path_length": 472
+  },
+  "TCN": {
+    "total_dtw_distance": 17261.77,
+    "normalized_dtw_distance": 21.4699,
+    "mean_30day_window_dtw": 24.0245,
+    "warping_path_length": 572
+  },
+  "SE-1": {
+    "total_dtw_distance": 13074.2,
+    "normalized_dtw_distance": 16.2614,
+    "mean_30day_window_dtw": 16.7531,
+    "warping_path_length": 547
+  },
+  "SE-2": {
+    "total_dtw_distance": 9560.83,
+    "normalized_dtw_distance": 11.8916,
+    "mean_30day_window_dtw": 12.0809,
+    "warping_path_length": 531
+  }
+}
