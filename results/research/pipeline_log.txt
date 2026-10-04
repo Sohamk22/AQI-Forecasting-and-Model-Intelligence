@@ -1,0 +1,121 @@
+=== Loading cached research bundle ===
+Train: tab=(5203, 65) seq=(5203, 14, 10) y=(5203,)
+Val:   tab=(870, 65) seq=(870, 14, 10) y=(870,)
+Test:  tab=(1770, 65) seq=(1770, 14, 10) y=(1770,)
+
+=== PHASE 7: Standalone Models ===
+  XGBoost: 1.3s  RMSE=28.10
+  ExtraTrees: 2.1s  RMSE=28.37
+  BiLSTM: 7.4s  RMSE=109.69
+  BiGRU: 8.4s  RMSE=108.15
+  TCN: 61.7s  RMSE=45.55
+
+=== PHASE 8: OOF Stacking ===
+  Fold 1/5 (train=868, val=867)...
+    Fold 1 complete.
+  Fold 2/5 (train=1735, val=867)...
+    Fold 2 complete.
+  Fold 3/5 (train=2602, val=867)...
+    Fold 3 complete.
+  Fold 4/5 (train=3469, val=867)...
+    Fold 4 complete.
+  Fold 5/5 (train=4336, val=867)...
+    Fold 5 complete.
+  OOF predictions: 4335 samples
+  SE-1 meta-learner trained. Importances: {'XGBoost': '0.747', 'BiLSTM': '0.054', 'TCN': '0.199'}
+  SE-1 RMSE=30.81
+  SE-2 meta-learner trained. Importances: {'XGBoost': '0.759', 'BiGRU': '0.069', 'TCN': '0.172'}
+  SE-2 RMSE=42.53
+
+=== PHASE 9: Ablation Study ===
+  --- Hybrid 1 (SE-1) Ablations ---
+    H1-A1 (BiLSTM+TCN, no XGB): RMSE=61.93, R²=0.6236
+    H1-A2 (XGB+BiLSTM, no TCN): RMSE=29.84, R²=0.9126
+    H1-A3 (XGB+TCN, no BiLSTM): RMSE=31.66, R²=0.9016
+    H1-A4 (Full SE-1): RMSE=30.81, R²=0.9068
+
+  --- Hybrid 2 (SE-2) Ablations ---
+  NOTE: H2-A3 guide says 'without BiLSTM' but BiLSTM is NOT in SE-2.
+        Using parallel interpretation: XGBoost+TCN (without BiGRU).
+    H2-A1 (BiGRU+TCN, no XGB): RMSE=88.4, R²=0.2329
+    H2-A2 (XGB+BiGRU, no TCN): RMSE=38.32, R²=0.8559
+    H2-A3 (XGB+TCN, no BiGRU*): RMSE=31.66, R²=0.9016
+    H2-A4 (Full SE-2): RMSE=42.53, R²=0.8224
+
+=== PHASE 10: Full Evaluation ===
+
+MAIN COMPARISON TABLE:
+     Model   RMSE   MAE  MAPE      R2
+   XGBoost  28.10 18.51 14.02  0.9225
+ExtraTrees  28.37 18.63 14.26  0.9210
+    BiLSTM 109.69 68.55 41.17 -0.1810
+     BiGRU 108.15 68.47 42.74 -0.1482
+       TCN  45.55 29.01 17.21  0.7963
+      SE-1  30.81 21.79 17.92  0.9068
+      SE-2  42.53 34.60 32.62  0.8224
+
+PER-CITY R² (selected models):
+Model      XGBoost    SE-1    SE-2
+City                              
+Bengaluru   0.7219  0.4417 -0.9866
+Chennai     0.6791  0.6382  0.1923
+Delhi       0.9176  0.8954  0.8381
+Gurugram    0.8647  0.8581  0.7564
+Hyderabad   0.8617  0.7434 -0.1023
+Patna       0.8800  0.8585  0.7743
+
+EXTREME AQI (>300): 202 samples
+     Model   RMSE    MAE       R2  Underest_Rate%
+   XGBoost  42.64  32.08   0.5503            62.9
+ExtraTrees  44.32  31.47   0.5144            69.8
+    BiLSTM 279.34 272.01 -18.2949           100.0
+     BiGRU 275.37 267.92 -17.7496           100.0
+       TCN 107.72  98.09  -1.8690            98.5
+      SE-1  52.77  41.62   0.3114            85.1
+      SE-2  42.38  31.80   0.5559            68.8
+
+=== PHASE 11: Generating Figures ===
+  All 7 figures saved.
+
+======================================================================
+FINAL RESULTS SUMMARY
+======================================================================
+
+Cities (6): ['Bengaluru', 'Chennai', 'Delhi', 'Gurugram', 'Hyderabad', 'Patna']
+Feature count: 65 tabular + 10 sequence channels
+Train: 5203 samples (< 2019-03-01)
+Val:   870 samples (2019-03-01 to 2019-08-31)
+Test:  1770 samples (2019-09-01 to 2020-07-01)
+
+MAIN COMPARISON:
+     Model   RMSE   MAE  MAPE      R2
+   XGBoost  28.10 18.51 14.02  0.9225
+ExtraTrees  28.37 18.63 14.26  0.9210
+    BiLSTM 109.69 68.55 41.17 -0.1810
+     BiGRU 108.15 68.47 42.74 -0.1482
+       TCN  45.55 29.01 17.21  0.7963
+      SE-1  30.81 21.79 17.92  0.9068
+      SE-2  42.53 34.60 32.62  0.8224
+
+SE-1 ABLATION (Hybrid 1):
+                    Config  RMSE   MAE  MAPE     R2
+H1-A1 (BiLSTM+TCN, no XGB) 61.93 36.97 21.17 0.6236
+H1-A2 (XGB+BiLSTM, no TCN) 29.84 21.02 17.24 0.9126
+H1-A3 (XGB+TCN, no BiLSTM) 31.66 22.26 18.48 0.9016
+         H1-A4 (Full SE-1) 30.81 21.79 17.92 0.9068
+
+SE-2 ABLATION (Hybrid 2):
+NOTE: H2-A3 guide says 'without BiLSTM' but BiLSTM is NOT in SE-2.
+      Used parallel interpretation: XGBoost+TCN (without BiGRU).
+                    Config  RMSE   MAE  MAPE     R2
+ H2-A1 (BiGRU+TCN, no XGB) 88.40 81.31 80.72 0.2329
+ H2-A2 (XGB+BiGRU, no TCN) 38.32 28.82 24.91 0.8559
+H2-A3 (XGB+TCN, no BiGRU*) 31.66 22.26 18.48 0.9016
+         H2-A4 (Full SE-2) 42.53 34.60 32.62 0.8224
+
+META-LEARNER FEATURE IMPORTANCES:
+  SE-1: {'XGBoost': '0.747', 'BiLSTM': '0.054', 'TCN': '0.199'}
+  SE-2: {'XGBoost': '0.759', 'BiGRU': '0.069', 'TCN': '0.172'}
+
+Total pipeline time: 276.1s
+Pipeline complete.

@@ -1,0 +1,24 @@
+{
+  "se1_importances": {
+    "XGBoost": 0.7469630248507038,
+    "BiLSTM": 0.05400676807600489,
+    "TCN": 0.1990302070732914
+  },
+  "se2_importances": {
+    "XGBoost": 0.7587209545099531,
+    "BiGRU": 0.06936194279617093,
+    "TCN": 0.17191710269387597
+  },
+  "cities": [
+    "Bengaluru",
+    "Chennai",
+    "Delhi",
+    "Gurugram",
+    "Hyderabad",
+    "Patna"
+  ],
+  "n_features": 65,
+  "train_samples": 5203,
+  "val_samples": 870,
+  "test_samples": 1770
+}
