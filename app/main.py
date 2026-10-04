@@ -18,6 +18,10 @@ from pydantic import BaseModel
 
 from src.models.xgboost_model import XGBoostModel
 from src.stacking.stacking_ensemble import StackingEnsemble
+from src.rag.schemas import PolicyAnalyzeRequest, PolicyAnalyzeResponse
+from src.rag.pipeline import PolicyRAGPipeline
+from src.rag.evaluator import PolicyRAGEvaluator
+from src.rag.assistant import PublicAssistantEngine, AssistantQueryRequest, AssistantQueryResponse
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
@@ -94,6 +98,16 @@ def load_resources():
     except Exception as e:
         print(f"Notice: Model checkpoint loading encountered: {e}")
 
+    try:
+        if "rag_pipeline" not in DATA_REGISTRY:
+            rag = PolicyRAGPipeline()
+            rag.initialize()
+            DATA_REGISTRY["rag_pipeline"] = rag
+        if "assistant_engine" not in DATA_REGISTRY and "rag_pipeline" in DATA_REGISTRY:
+            DATA_REGISTRY["assistant_engine"] = PublicAssistantEngine(DATA_REGISTRY["rag_pipeline"])
+    except Exception as e:
+        print(f"Notice: RAG/Assistant engine loading encountered: {e}")
+
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
@@ -106,7 +120,11 @@ app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def home_page(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
+    return templates.TemplateResponse(request=request, name="index.html", context={"initial_view": "public"})
+
+@app.get("/government", response_class=HTMLResponse)
+async def government_page(request: Request):
+    return templates.TemplateResponse(request=request, name="index.html", context={"initial_view": "government"})
 
 @app.get("/api/available_dates")
 async def get_available_dates():
@@ -347,3 +365,72 @@ async def get_model_metrics():
             data = json.load(f)
         return {"status": "success", "metrics": data}
     return {"status": "error", "message": "Metrics file not found"}
+
+@app.post("/api/policy/analyze", response_model=PolicyAnalyzeResponse)
+async def analyze_policy(payload: PolicyAnalyzeRequest):
+    """
+    RAG-driven policy intelligence and mitigation advisory based on
+    forecasted AQI severity and official statutory policy documents.
+    Strictly prior-only: never leaks contemporaneous actual AQI.
+    """
+    # 1. Obtain forecast context via existing forecast logic
+    pred_input = PredictionInput(date=payload.date)
+    forecast_data = await predict_aqi(pred_input)
+    
+    # 2. Get or initialize RAG pipeline
+    rag = DATA_REGISTRY.get("rag_pipeline")
+    if rag is None:
+        rag = PolicyRAGPipeline()
+        rag.initialize()
+        DATA_REGISTRY["rag_pipeline"] = rag
+        
+    # 3. Execute grounded analysis
+    response = rag.analyze(
+        forecast_data=forecast_data,
+        query_override=payload.query_override,
+        top_k=payload.top_k or 5
+    )
+    return response
+
+@app.get("/api/policy/evaluation")
+async def evaluate_policy_rag():
+    """Returns Lab 5 benchmark evaluation and failure analysis report."""
+    rag = DATA_REGISTRY.get("rag_pipeline")
+    if rag is None:
+        rag = PolicyRAGPipeline()
+        rag.initialize()
+        DATA_REGISTRY["rag_pipeline"] = rag
+    evaluator = PolicyRAGEvaluator(rag)
+    return evaluator.run_evaluation()
+
+@app.post("/api/assistant/query", response_model=AssistantQueryResponse)
+@app.post("/api/chat", response_model=AssistantQueryResponse)
+async def query_public_assistant(payload: AssistantQueryRequest):
+    """
+    Public AI Assistant Endpoint:
+    Synthesizes prior-only ML forecast + hybrid policy RAG retrieval + conversational LLM response.
+    """
+    # 1. Obtain forecast context
+    pred_input = PredictionInput(date=payload.date)
+    forecast_data = await predict_aqi(pred_input)
+    
+    # 2. Get or initialize assistant engine
+    assistant = DATA_REGISTRY.get("assistant_engine")
+    if assistant is None:
+        rag = DATA_REGISTRY.get("rag_pipeline")
+        if rag is None:
+            rag = PolicyRAGPipeline()
+            rag.initialize()
+            DATA_REGISTRY["rag_pipeline"] = rag
+        assistant = PublicAssistantEngine(rag)
+        DATA_REGISTRY["assistant_engine"] = assistant
+
+    # 3. Query conversational assistant
+    response = assistant.query(
+        query_text=payload.query,
+        forecast_data=forecast_data,
+        top_k=payload.top_k or 5
+    )
+    return response
+
+
