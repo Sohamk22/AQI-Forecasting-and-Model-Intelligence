@@ -2,13 +2,11 @@
 
 This log captures the major decisions, problems, and changes that shaped AeroPulse.
 
----
 
 ## 1. Project Goal
 
 The goal was to build a system that could forecast next-day AQI using historical air-quality and weather data, while comparing different machine-learning and deep-learning approaches.
 
----
 
 ## 2. Data Leakage — The First Major Problem
 
@@ -35,7 +33,6 @@ The forecasting setup became:
 
 **Previous 14 days → Target day's AQI**
 
----
 
 ## 3. Time-Series Validation
 
@@ -47,7 +44,6 @@ I therefore changed the stacking evaluation to a 5-fold expanding TimeSeriesSpli
 
 The base models generate out-of-fold predictions from future folds, and the meta-learner is trained only on those predictions.
 
----
 
 ## 4. The Result I Didn't Expect
 
@@ -72,7 +68,6 @@ SE-2 was the best ensemble, but it still did not beat XGBoost.
 
 This showed that adding more model complexity did not necessarily improve the forecast.
 
----
 
 ## 5. Preprocessing Caveat
 
@@ -82,7 +77,6 @@ This creates a potential dependency around the split boundary.
 
 I kept the capstone benchmark frozen rather than changing the experiment at this stage, and documented this as a limitation to address in the future research version.
 
----
 
 ## 6. Where the Project Ended Up
 
@@ -100,7 +94,6 @@ It includes:
 - Model benchmarking
 - Automated tests
 
----
 
 ## 7. What I Took Away
 
