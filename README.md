@@ -1,23 +1,21 @@
 # AeroPulse
 
-> **Understand your air. Make better decisions.**
+### Air Quality Forecasting & Policy Intelligence
 
-AeroPulse is an ambient air-quality intelligence platform that combines **AQI forecasting** with a **policy-aware RAG assistant**.
+AeroPulse is an air-quality intelligence system that combines **AQI forecasting** with a **policy-aware AI assistant**.
 
-The platform has two main parts:
+It provides:
 
-- **AQI Forecasting:** Machine-learning models predict AQI using only information from previous days.
-- **Policy Assistant:** A document-based RAG assistant answers air-quality and environmental-policy questions using the official documents included in the project.
+- AQI predictions using trained machine-learning and deep-learning models
+- A comparison of seven forecasting approaches
+- A policy assistant backed by official air-quality and environmental documents
+- A simple web interface for interacting with both capabilities
 
 ---
 
-## 🚀 Run AeroPulse Locally
-
-If you just want to run the project, follow these steps.
+## Quick Start
 
 ### 1. Clone the repository
-
-Open Terminal and run:
 
 ```bash
 git clone https://github.com/Sohamk22/AQI-Forecasting-and-Model-Intelligence.git
@@ -26,18 +24,12 @@ cd AQI-Forecasting-and-Model-Intelligence
 
 ### 2. Use Python 3.12
 
-Python **3.12.x** is recommended for this project.
+Python **3.12** is recommended for this project.
 
 Check your version:
 
 ```bash
 python3.12 --version
-```
-
-You should see something similar to:
-
-```text
-Python 3.12.14
 ```
 
 ### 3. Create a virtual environment
@@ -46,13 +38,17 @@ Python 3.12.14
 python3.12 -m venv .venv
 ```
 
-Activate it on macOS/Linux:
+Activate it:
 
+**macOS / Linux**
 ```bash
 source .venv/bin/activate
 ```
 
-You should now see `(.venv)` at the beginning of your terminal.
+**Windows**
+```bash
+.venv\Scripts\activate
+```
 
 ### 4. Install dependencies
 
@@ -60,334 +56,118 @@ You should now see `(.venv)` at the beginning of your terminal.
 pip install -r requirements.txt
 ```
 
-This installs the libraries required for the forecasting models, FastAPI application, RAG system, and supporting components.
+The repository includes the trained models, datasets required by the application, and policy documents used by the assistant.
 
-### 5. Start the application
-
-Run:
+### 5. Start AeroPulse
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-**Important:** `main.py` is inside the `app/` directory, so use `app.main:app`.
-
-When the server starts, you should see:
+You should see:
 
 ```text
 Uvicorn running on http://127.0.0.1:8000
 ```
 
-### 6. Open the website
+### 6. Open the application
 
-Open your browser and go to:
+Go to:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-That's it. AeroPulse should now be running locally.
+That's it.
 
 ---
 
-## 🌫️ What Can You Do With AeroPulse?
+## What Can You Do?
 
 ### AQI Forecasting
 
-Use the forecasting interface to:
+Enter the required date and location information through the web interface to generate an AQI prediction using the trained forecasting models.
 
-- View AQI forecasts
-- Compare predictions from multiple models
-- Explore historical AQI behaviour
-- View prior pollutant trends
-- Understand the factors behind predictions
-
-The forecasting system uses information from previous observations:
+The forecasting pipeline uses only information available **before the prediction date**:
 
 ```text
-X(t-14, ..., t-1) → AQI(t)
+X(t-14), ..., X(t-1) → AQI(t)
 ```
 
-This means information from the target day is not used to make the prediction.
+This prevents future information from leaking into the prediction.
 
-### 🤖 Policy & Air-Quality Assistant
+### Policy Assistant
 
-The Public Assistant provides answers to questions about:
+The built-in assistant can answer questions about:
 
-- Air-quality conditions
-- Outdoor activity
-- Pollution causes
+- Air-quality regulations
 - Government actions
-- GRAP
-- Environmental regulations
-- AQI interpretation
+- Pollution-control measures
+- Outdoor activity guidance
+- Evidence from official policy documents
 
-Try questions such as:
-
-> Is it safe for a morning jog today?
-
-or:
-
-> What GRAP actions apply during severe pollution?
-
-The assistant uses the policy documents included in the repository and can operate using its built-in offline retrieval and response mechanism.
-
-**No API key is required for the basic local workflow.**
+The assistant uses a hybrid retrieval pipeline combining keyword and semantic search over the included policy documents.
 
 ---
 
-## 🔬 What Makes the Forecasting Setup Different?
+## Model Performance
 
-During development, an important target-leakage issue was discovered.
+The project evaluates multiple forecasting approaches on a chronological held-out test set.
 
-Using same-day pollutant measurements to predict same-day AQI would make the task closer to calculating AQI than forecasting it.
-
-The original formulation was therefore changed to a strictly prior-only setup:
-
-```text
-X(t-14, ..., t-1) → AQI(t)
-```
-
-Rolling features are also shifted so that information from day `t` cannot enter the prediction for day `t`.
-
-The evaluation uses:
-
-- Chronological train/test splitting
-- A historical climatology baseline
-- Seven forecasting model configurations
-- Leakage checks
-- Out-of-fold stacking for the ensemble models
-
-This makes the evaluation closer to a genuine forecasting problem rather than concurrent AQI estimation.
-
----
-
-## 📊 Model Benchmark
-
-The Delhi held-out evaluation compared the following approaches:
-
-| Model | Test RMSE ↓ | Test R² ↑ |
+| Model | RMSE | R² |
 |---|---:|---:|
 | Historical Climatology | 100.45 | 0.2097 |
-| Dilated TCN | 77.24 | 0.5328 |
+| TCN | 77.24 | 0.5328 |
 | Bi-LSTM | 59.15 | 0.7260 |
 | SE-1 | 45.85 | 0.8354 |
 | Bi-GRU | 42.67 | 0.8574 |
 | SE-2 | 39.14 | 0.8800 |
 | Extra Trees | 36.37 | 0.8964 |
-| **XGBoost** | **34.58** | **0.9063** |
+| XGBoost | **34.58** | **0.9063** |
 
-The results show that tree-based models perform particularly well when working with engineered prior-day lag and rolling features, while the sequence models provide a different inductive bias for extreme pollution events.
-
----
-
-## 🧠 Policy RAG
-
-The RAG component works with statutory environmental documents included in:
-
-```text
-data/policy_documents/
-```
-
-The knowledge base includes documents covering areas such as:
-
-- GRAP
-- NCAP
-- Air Act 1981
-- CAQM Act 2021
-- CPCB air-quality standards
-
-The retrieval pipeline combines:
-
-- BM25 keyword retrieval
-- Dense vector retrieval
-- Reciprocal Rank Fusion
-- Citation verification
-- Intent routing
-- Prompt-injection safeguards
-- Offline fallback responses
-
-The goal is to provide answers grounded in the project's supplied policy documents rather than relying only on general model knowledge.
+The results show that tree-based models perform particularly well on the engineered lag and rolling features, while the stacked ensembles combine complementary modelling approaches.
 
 ---
 
-## 🧪 Running the Tests
-
-Tests are available under:
+## Project Structure
 
 ```text
-tests/
-```
-
-To run them:
-
-```bash
-python -m pytest tests/ -v
-```
-
-The test suite covers areas including:
-
-- API behaviour
-- Forecasting logic
-- Leakage protection
-- Stacking
-- RAG retrieval
-- Citation verification
-- Assistant behaviour
-- Safety checks
-
-> **Note:** The tests are an optional verification step. You do not need to run them to launch the web application.
-
----
-
-## 📁 Project Structure
-
-```text
-AQI-Forecasting-and-Model-Intelligence/
-│
-├── app/
-│   ├── main.py              # FastAPI application
-│   ├── static/              # Frontend assets
-│   └── templates/           # Web interface
-│
-├── data/
-│   ├── raw/                 # Raw air-quality/weather data
-│   ├── processed/           # Processed datasets
-│   ├── policy_documents/    # RAG source documents
-│   └── cache/               # Precomputed RAG resources
-│
-├── experiments/             # Model experiments
-├── notebooks/               # Exploratory analysis
-├── results/                 # Metrics and research outputs
+AeroPulse/
+├── app/                    # FastAPI application and web interface
 ├── src/
-│   ├── models/              # Forecasting models
-│   ├── features/            # Feature engineering
-│   ├── evaluation/          # Evaluation utilities
-│   ├── stacking/            # Ensemble models
-│   └── rag/                 # RAG and assistant
-│
-├── tests/                   # Automated tests
-├── requirements.txt         # Python dependencies
+│   ├── models/             # Forecasting models
+│   ├── stacking/           # Stacked ensemble models
+│   └── rag/                # Policy retrieval pipeline
+├── data/
+│   └── policy_documents/   # Policy and regulatory documents
+├── experiments/            # Trained model checkpoints
+├── tests/                  # Automated tests
+├── results/                # Evaluation results
+├── notebooks/              # Analysis notebooks
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## 🛠️ Troubleshooting
+## Important Note
 
-### `python3.12: command not found`
+The original coursework focused on the **leak-free AQI forecasting pipeline and model comparison**.
 
-Install Python 3.12 and make sure it is available from your Terminal.
-
-### `pip install` fails
-
-Check that the virtual environment is active:
-
-```bash
-source .venv/bin/activate
-```
-
-Then verify:
-
-```bash
-python --version
-```
-
-It should show Python 3.12.x.
-
-### `Could not import module "main"`
-
-Use:
-
-```bash
-uvicorn app.main:app --reload
-```
-
-not:
-
-```bash
-uvicorn main:app --reload
-```
-
-The FastAPI entry point is located at:
-
-```text
-app/main.py
-```
-
-### Port 8000 is already in use
-
-Stop the other running server with:
-
-```text
-Ctrl + C
-```
-
-Or use another port:
-
-```bash
-uvicorn app.main:app --reload --port 8001
-```
-
-Then open:
-
-```text
-http://127.0.0.1:8001
-```
+The policy assistant, RAG functionality, and additional interface improvements were developed later as an extension of the project.
 
 ---
 
-## 📝 Project Evolution
+## Limitations
 
-### Phase 1 — Original Coursework
-
-The original project focused on the AQI forecasting system, including:
-
-- Prior-only forecasting
-- Seven-model comparison
-- Historical climatology baseline
-- Chronological evaluation
-- Leakage protection
-- FastAPI application
-
-### Phase 2 — Post-Submission Development
-
-The project was subsequently extended with:
-
-- Policy RAG
-- Public air-quality assistant
-- Statutory document retrieval
-- Citation verification
-- Safety and intent routing
-- UI improvements
-- Expanded research analysis
-
-These later additions are intentionally distinguished from the original coursework submission.
-
----
-
-## 💡 What I Would Do Differently
-
-Future improvements could include:
-
-1. **Multi-horizon forecasting** for 1, 3, and 7-day predictions.
-2. **Spatial modelling** to better capture pollution movement between cities.
-3. **Forecast weather inputs** instead of relying only on historical weather observations.
-4. **Larger and more diverse datasets** to improve generalisation across regions and seasons.
-
----
-
-## 📌 Limitations
-
-- Forecasting performance depends on the quality and availability of historical observations.
-- The current operational forecasting setup focuses primarily on short-horizon prediction.
-- The RAG assistant is grounded in the policy documents included with the project and should not be treated as a substitute for official legal or medical advice.
-- Research results and the interactive application serve different purposes: the former evaluates forecasting methodology, while the latter provides an accessible demonstration.
+- Forecast accuracy depends on the quality and availability of historical air-quality data.
+- The current system focuses on the forecasting setup implemented in the project rather than multi-horizon operational forecasting.
+- Policy answers are grounded in the documents included with the repository.
 
 ---
 
 ## License & Data
 
-This project is released under the **MIT License**.
+This project was developed for academic and research purposes.
 
-Air-quality observations are sourced from the Central Pollution Control Board (CPCB) India Open Government Data platform, while meteorological reanalysis data is based on ECMWF ERA5.
+Please refer to the included project documentation for dataset and policy-document attribution.
